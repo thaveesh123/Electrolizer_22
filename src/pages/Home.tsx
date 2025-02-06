@@ -49,8 +49,9 @@ const Header = () => {
       <div
         style={{
           padding: "40px 0",
+          paddingTop: "200px",
           color: "white",
-          fontSize: "32px",
+          fontSize: "90px",
           height: "100vh",
           backgroundImage: "url('/IMG-20250206-WA0002.jpg')",
           backgroundSize: "cover",
