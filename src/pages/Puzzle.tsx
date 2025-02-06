@@ -42,7 +42,7 @@ const Puzzle = () => {
     height: "100vh",
     color: "#fff",
     textAlign: "center",
-    padding: "1px",
+    padding: "20px",
   };
 
   const terminalStyle = {
@@ -84,19 +84,37 @@ const Puzzle = () => {
     <div style={containerStyle}>
       <header style={{ marginBottom: "30px" }}>
         <pre id="title" style={headingStyle}>
-        Welcome To The Equalizer 22
+        Welcome to Transformer Game. 
         </pre>
-        <h2 id="subtitle" style={subtitleStyle}>
-        In a quiet corner of the universe, the Decepticons launched a covert operation, encrypting the name of your group's protector. To uncover the identity of your guardian robot, you must decrypt the hidden message—only then will you discover the group’s true name. The mission is in your hands, but only through the code will the secret be revealed</h2>
-        <h2 id="subtitle" style={subtitleStyle}>
-          
-          "In a world where Autobots fight Decepticons,
-          I stand as a trilogy with battles and bonds.
-          The first is "Revenge," the second "Dark,"
-          The third is where the final fight sparks.
-          What number am I, when all three are seen?"
+        <h2
+          id="subtitle"
+          style={{
+            backgroundColor: "rgba(44, 74, 227, 0.5)", // Red with 50% transparency
+            padding: "10px",
+            borderRadius: "5px",
+            display: "inline-block",
+          }}
+        >
+          In a quiet corner of the universe, the Decepticons launched a covert operation, encrypting the name of your group's protector. To uncover the identity of your guardian robot, you must decrypt the hidden message—only then will you discover the group’s true name. The mission is in your hands, but only through the code will the secret be revealed.
         </h2>
         
+        <h2
+          id="subtitle"
+          style={{
+            backgroundColor: "rgba(255, 0, 0, 0.5)", // Red with 50% transparency
+            padding: "10px",
+            borderRadius: "5px",
+            display: "inline-block",
+          }}
+        >
+          hint::  
+          "In a world where Autobots fight Decepticons,  
+          I stand as a trilogy with battles and bonds.  
+          The first is 'Revenge,' the second 'Dark,'  
+          The third is where the final fight sparks.  
+          What number am I, when all three are seen?"
+        </h2>
+
       </header>
 
       <div id="terminal" style={terminalStyle}>

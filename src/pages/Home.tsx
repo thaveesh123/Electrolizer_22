@@ -180,13 +180,13 @@ const Footer = () => {
       </div>
       <div style={{ marginTop: "10px" }}>
         <a
-          href="https://www.facebook.com/acespera/"
+          href="https://web.facebook.com/EEES.UoP"
           style={{ margin: "0 10px", color: "white", fontSize: "24px" }}
         >
           📘
         </a>
         <a
-          href="https://lk.linkedin.com/company/aces-association-of-computer-engineering-students"
+          href="https://eees-uop.edu.lk"
           style={{ margin: "0 10px", color: "white", fontSize: "24px" }}
         >
           🔗

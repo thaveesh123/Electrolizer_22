@@ -14,9 +14,9 @@ export default function StudentQRScanner() {
 
   const speak = (text: string) => {
     const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = "en-US-Wavenet-D";
-    utterance.pitch = 1;
-    utterance.rate = 0.8;
+    utterance.lang = "en-US";
+    utterance.pitch = 0.7;
+    utterance.rate = 0.6;
     utterance.volume = 3;
 
     const voices = window.speechSynthesis.getVoices();
@@ -93,8 +93,7 @@ export default function StudentQRScanner() {
             const std = STUDENTS.find((std) => std.id === Number(result[0].rawValue));
 
             if (std) {
-              speak(`Welcome ${std.name}`);
-              speak(`Team ${std.team}`);
+              speak(`Welcome to Team ${std.team}`);
             }
           }}
           scanDelay={100}
