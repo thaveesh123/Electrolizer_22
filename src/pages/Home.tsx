@@ -3,7 +3,6 @@ import useUserStore from "../store/store";
 import { STUDENTS } from "../data/students.data";
 import { useNavigate } from "react-router-dom";
 
-
 const Header = () => {
   return (
     <header
@@ -51,12 +50,13 @@ const Header = () => {
           padding: "40px 0",
           paddingTop: "200px",
           color: "white",
-          fontSize: "90px",
+          fontSize: "54px",
           height: "100vh",
           backgroundImage: "url('/IMG-20250206-WA0002.jpg')",
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
+          whiteSpace: "pre-wrap",
         }}
       >
         ELECTROLIZER 25
@@ -68,8 +68,8 @@ const Header = () => {
 const ContactSection = () => {
   const [regNumber, setRegNumber] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const {setLoggedInUser}=useUserStore()
-  const navigate=useNavigate()
+  const { setLoggedInUser } = useUserStore();
+  const navigate = useNavigate();
 
   const validateRegNumber = () => {
     const regex = /^E\/22\/(\d+)$/;
@@ -90,7 +90,7 @@ const ContactSection = () => {
 
     setErrorMessage("");
     setLoggedInUser(student);
-    navigate('/puzzle')
+    navigate("/puzzle");
   };
 
   return (
@@ -138,7 +138,7 @@ const ContactSection = () => {
             border: "none",
             borderRadius: "5px",
             cursor: "pointer",
-            marginLeft:'13px'
+            marginLeft: "13px",
           }}
         >
           Enter

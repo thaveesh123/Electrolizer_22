@@ -2,16 +2,18 @@ import React, { useEffect, useState } from "react";
 import useUserStore from "../store/store";
 import { decodeCaesarCipher } from "../data/students.data";
 import { useNavigate } from "react-router-dom";
+import { QRCodeCanvas } from "qrcode.react";
 
 const Puzzle = () => {
   const { loggedInUser } = useUserStore();
   const [inputText, setInputText] = useState("");
   const [qrCodeGenerated, setQrCodeGenerated] = useState(false);
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
     if (!loggedInUser) {
-      navigate("/"); 
+      navigate("/");
     }
   }, [loggedInUser, navigate]);
 
@@ -19,6 +21,7 @@ const Puzzle = () => {
     target: { value: React.SetStateAction<string> };
   }) => {
     setInputText(event.target.value);
+    setError("");
   };
 
   const handleSubmit = () => {
@@ -28,10 +31,31 @@ const Puzzle = () => {
       shift,
       inputText
     );
-    setQrCodeGenerated(decodedCorrectly);
+
+    if (decodedCorrectly) {
+      setQrCodeGenerated(true);
+      setError("");
+    } else {
+      setQrCodeGenerated(false);
+      setError("❌ Invalid input! Please try again.");
+    }
   };
 
-  const containerStyle = {
+  const handleDownloadQRCode = () => {
+    const canvas = document.getElementById("mySvg") as HTMLCanvasElement;
+    console.log(canvas);
+
+    if (canvas) {
+      const imageUrl = canvas.toDataURL("image/png");
+
+      const link = document.createElement("a");
+      link.href = imageUrl;
+      link.download = "qrcode.png";
+      link.click();
+    }
+  };
+
+  const containerStyle: React.CSSProperties = {
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
@@ -39,18 +63,27 @@ const Puzzle = () => {
     backgroundImage: "url('/im6.jpg')",
     backgroundSize: "cover",
     backgroundPosition: "center",
-    height: "100vh",
+    minHeight: "100vh",
     color: "#fff",
     textAlign: "center",
     padding: "20px",
   };
+  
+
+  const headingStyle: React.CSSProperties = {
+    fontSize: "2rem",
+    marginBottom: "20px",
+    whiteSpace: "pre-wrap",
+    wordWrap: "break-word", 
+  };
+
 
   const terminalStyle = {
     backgroundColor: "#1e1e1e",
     color: "white",
     padding: "20px",
     borderRadius: "10px",
-    width: "80%",
+    width: "90%",
     maxWidth: "500px",
     marginBottom: "20px",
     boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
@@ -63,28 +96,15 @@ const Puzzle = () => {
     padding: "10px",
     marginTop: "10px",
     width: "80%",
-    fontSize: "1rem",
+    fontSize: window.innerWidth < 600 ? "0.9rem" : "1rem", // Adjust font size
     outline: "none",
-  };
-
-  const headingStyle = {
-    fontSize: "3rem",
-    marginBottom: "20px",
-  };
-
-  const subtitleStyle = {
-    fontSize: "1.8rem",
-    color: "#d53dd5",
-    marginTop: "10px",
-    fontFamily: "'Roboto Mono', monospace",
-    letterSpacing: "0.1em",
   };
 
   return (
     <div style={containerStyle}>
-      <header style={{ marginBottom: "30px" }}>
+      <header style={{ marginBottom: "30px", width: "80%" }}>
         <pre id="title" style={headingStyle}>
-        Welcome to Transformer Game. 
+          Welcome to Transformer Game.
         </pre>
         <h2
           id="subtitle"
@@ -95,33 +115,38 @@ const Puzzle = () => {
             display: "inline-block",
           }}
         >
-          In a quiet corner of the universe, the Decepticons launched a covert operation, encrypting the name of your group's protector. To uncover the identity of your guardian robot, you must decrypt the hidden message—only then will you discover the group’s true name. The mission is in your hands, but only through the code will the secret be revealed.
+          In a quiet corner of the universe, the Decepticons launched a covert
+          operation, encrypting the name of your group's protector. To uncover
+          the identity of your guardian robot, you must decrypt the hidden
+          message—only then will you discover the group’s true name. The mission
+          is in your hands, but only through the code will the secret be
+          revealed.
         </h2>
-        
+
         <h2
           id="subtitle"
           style={{
-            backgroundColor: "rgba(255, 0, 0, 0.5)", // Red with 50% transparency
+            backgroundColor: "rgba(255, 0, 0, 0.5)",
             padding: "10px",
             borderRadius: "5px",
             display: "inline-block",
           }}
         >
-          hint::  
-          "In a world where Autobots fight Decepticons,  
-          I stand as a trilogy with battles and bonds.  
-          The first is 'Revenge,' the second 'Dark,'  
-          The third is where the final fight sparks.  
-          What number am I, when all three are seen?"
+          hint:: "In a world where Autobots fight Decepticons, I stand as a
+          trilogy with battles and bonds. The first is 'Revenge,' the second
+          'Dark,' The third is where the final fight sparks. What number am I,
+          when all three are seen?"
         </h2>
-
       </header>
 
       <div id="terminal" style={terminalStyle}>
         <h2>DECRYPT IF YOU CAN!!!</h2>
-        
+
         <pre id="output" style={{ fontSize: "1rem" }}></pre>
-        <pre id="generated-output" style={{ fontSize: "2rem", fontWeight: "bold" }}>
+        <pre
+          id="generated-output"
+          style={{ fontSize: "2rem", fontWeight: "bold" }}
+        >
           {loggedInUser?.caesarCipher}
         </pre>
         <div id="input-container">
@@ -149,31 +174,34 @@ const Puzzle = () => {
         >
           Submit
         </button>
-
+        {error && (
+          <p style={{ color: "red", marginTop: "10px", fontWeight: "bold" }}>
+            {error}
+          </p>
+        )}
         {qrCodeGenerated && loggedInUser?.id && (
           <div style={{ marginTop: "20px" }}>
-            {/* Display the pre-generated QR code from public folder */}
-            <img
-              src={`/QR_codes/${loggedInUser.id}.png`} // Path to the pre-generated QR codes
-              alt="User QR Code"
-              style={{ width: "256px", height: "256px" }}
+            <QRCodeCanvas
+              id="mySvg"
+              value={loggedInUser?.id.toString()}
+              size={256}
+              fgColor="#fff"
+              bgColor="#000"
             />
             <p>Your QR Code with User ID has been generated!</p>
-            <a
-              href={`/QR_codes/${loggedInUser.id}.png`}
-              download={`user-${loggedInUser.id}-qrcode.png`}
+            <button
+              onClick={handleDownloadQRCode}
               style={{
-                display: "inline-block",
                 padding: "10px 20px",
                 backgroundColor: "#4CAF50",
                 color: "white",
-                textDecoration: "none",
+                border: "none",
                 borderRadius: "5px",
                 marginTop: "10px",
               }}
             >
               Download QR Code
-            </a>
+            </button>
           </div>
         )}
       </div>
